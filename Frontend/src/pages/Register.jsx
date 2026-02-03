@@ -1,9 +1,10 @@
 import { useState } from "react";
-import axios from "../api/axios";
-import { useNavigate, Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { register, loading, error } = useAuth();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -12,48 +13,31 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     const { name, email, password, confirmPassword } = formData;
 
-    // Client-side validation
     if (!name || !email || !password || !confirmPassword) {
-      return setError("All fields are required");
+      return alert("All fields are required");
     }
 
     if (password.length < 6) {
-      return setError("Password must be at least 6 characters");
+      return alert("Password must be at least 6 characters");
     }
 
     if (password !== confirmPassword) {
-      return setError("Passwords do not match");
+      return alert("Passwords do not match");
     }
 
-    try {
-      setLoading(true);
+    const success = await register({ name, email, password });
 
-      await axios.post("/users/register", {
-        name,
-        email,
-        password,
-      });
-
+    if (success) {
       navigate("/login");
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Registration failed. Try again."
-      );
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -112,7 +96,7 @@ const Register = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-60"
         >
           {loading ? "Creating account..." : "Register"}
         </button>
