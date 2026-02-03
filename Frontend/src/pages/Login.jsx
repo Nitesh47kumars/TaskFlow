@@ -1,18 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, user, loading, error } = useAuth();
+  const { login, loading, error } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+  const [formError, setFormError] = useState(null);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormError(null); // clear client-side error on typing
   };
 
   const handleSubmit = async (e) => {
@@ -21,7 +24,12 @@ const Login = () => {
     const { email, password } = formData;
 
     if (!email || !password) {
-      return alert("Email and password are required");
+      return setFormError("Email and password are required");
+    }
+
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email)) {
+      return setFormError("Please enter a valid email address");
     }
 
     const success = await login({ email, password });
@@ -29,10 +37,6 @@ const Login = () => {
       navigate("/dashboard");
     }
   };
-
-  useEffect(() => {
-    if (user) navigate("/dashboard");
-  }, [user, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -42,6 +46,12 @@ const Login = () => {
       >
         <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
 
+        {formError && (
+          <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">
+            {formError}
+          </p>
+        )}
+        
         {error && (
           <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">
             {error}

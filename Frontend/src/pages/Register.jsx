@@ -13,8 +13,11 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const [formError, setFormError] = useState(null);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormError(null);
   };
 
   const handleSubmit = async (e) => {
@@ -23,19 +26,23 @@ const Register = () => {
     const { name, email, password, confirmPassword } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
-      return alert("All fields are required");
+      return setFormError("All fields are required");
+    }
+
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailRegex.test(email)) {
+      return setFormError("Please enter a valid email address");
     }
 
     if (password.length < 6) {
-      return alert("Password must be at least 6 characters");
+      return setFormError("Password must be at least 6 characters");
     }
 
     if (password !== confirmPassword) {
-      return alert("Passwords do not match");
+      return setFormError("Passwords do not match");
     }
 
     const success = await register({ name, email, password });
-
     if (success) {
       navigate("/login");
     }
@@ -50,6 +57,12 @@ const Register = () => {
         <h2 className="text-2xl font-bold text-center mb-4">
           Create an account
         </h2>
+
+        {formError && (
+          <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">
+            {formError}
+          </p>
+        )}
 
         {error && (
           <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">

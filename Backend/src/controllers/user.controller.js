@@ -31,12 +31,13 @@ export const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    throw new ApiError(401, "Invalid credentials");
+    throw new ApiError(401, "User Not Found!!!");
   }
+  console.log(ApiError)
 
   const isPasswordValid = await user.isPasswordCorrect(password);
   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid credentials");
+    throw new ApiError(401, "Wrong Password!");
   }
 
   const token = user.generateAccessToken();
