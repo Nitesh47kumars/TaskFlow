@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -8,12 +9,15 @@ const Navbar = () => {
       <h1 className="text-xl font-bold text-blue-600">TaskFlow</h1>
 
       <div className="flex items-center gap-4">
-        {user && (
-          <div className="text-sm text-right">
-            <p className="font-semibold">{user.name}</p>
-            <p className="text-gray-500">{user.email}</p>
-          </div>
-        )}
+        <div className="flex space-x-3">
+          <Link to="/dashboard" className="text-gray-600 hover:text-black">
+            Dashboard
+          </Link>
+
+          <Link to="/profile" className="text-gray-600 hover:text-black">
+            Profile
+          </Link>
+        </div>
 
         <button
           onClick={logout}

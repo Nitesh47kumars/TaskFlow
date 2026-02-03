@@ -15,25 +15,16 @@ export const AuthProvider = ({ children }) => {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         try {
           const res = await axios.get("/users/me");
-          setUser(res.data.user);
+          setUser(res.data.data);
         } catch (err) {
           logout();
         }
       }
-      setLoading(false)
+      setLoading(false);
     };
     checkAuth();
   }, []);
-
-  const fetchCurrentUser = async () => {
-    try {
-      const res = await axios.get("/users/me");
-      setUser(res.data.user);
-    } catch (err) {
-      logout();
-    }
-  };
-
+  
   const register = async ({ name, email, password }) => {
     setLoading(true);
     setError(null);
@@ -73,6 +64,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateProfile = async ({ name, email }) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.put("/users/me", { name, email });
+      setUser(res.data.data);
+      return true;
+    } catch (err) {
+      setError(err.response?.data?.message || "Profile update failed");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     delete axios.defaults.headers.common["Authorization"];
@@ -88,6 +95,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
+        updateProfile
       }}
     >
       {children}

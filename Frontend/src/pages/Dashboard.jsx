@@ -3,6 +3,7 @@ import axios from "../api/axios";
 import Navbar from "../components/Navbar";
 import TaskForm from "../components/TaskForm";
 import TaskCard from "../components/TaskCard";
+import { useAuth } from "../context/AuthContext";
 
 const Dashboard = () => {
   const [tasks, setTasks] = useState([]);
@@ -10,6 +11,8 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
+
+  const {user} = useAuth();
 
   const getAllTasks = async () => {
     try {
@@ -57,11 +60,10 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {" "}
-      {/* Soft slate background */}
       <Navbar />
       <div className="p-8 max-w-6xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Task Overview</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Hi - {user.name}</h1>
           <p className="text-gray-500">
             Manage your daily flow and productivity.
           </p>
