@@ -46,14 +46,19 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.post("/users/login", { email, password });
 
-      const { token, user } = res.data;
+      const { token, user } = res.data.data;
+
       localStorage.setItem("token", token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       setUser(user);
 
       return true;
     } catch (err) {
-      setError(err.response?.data?.message || "Login failed");
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Invalid email or password";
+      setError(message);
       return false;
     } finally {
       setLoading(false);
