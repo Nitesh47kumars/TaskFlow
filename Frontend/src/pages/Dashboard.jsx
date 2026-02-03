@@ -21,7 +21,6 @@ const Dashboard = () => {
   };
 
   const deleteTaskById = async (taskId) => {
-    if (!confirm("Delete this task?")) return;
     await axios.delete(`/tasks/${taskId}`);
     getAllTasks();
   };

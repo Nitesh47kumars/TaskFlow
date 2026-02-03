@@ -22,7 +22,6 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const { name, email, password, confirmPassword } = formData;
 
     if (!name || !email || !password || !confirmPassword) {
@@ -49,74 +48,73 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md"
+        className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold text-center mb-4">
-          Create an account
+        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-2">
+          Create Account
         </h2>
+        <p className="text-gray-500 text-center mb-8 text-sm">
+          Join TaskFlow to manage your productivity.
+        </p>
 
-        {formError && (
-          <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">
-            {formError}
-          </p>
+        {(formError || error) && (
+          <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm border border-red-100">
+            {formError || error}
+          </div>
         )}
 
-        {error && (
-          <p className="bg-red-100 text-red-600 p-2 rounded mb-3 text-sm">
-            {error}
-          </p>
-        )}
-
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          className="w-full p-2 border rounded mb-3"
-          value={formData.name}
-          onChange={handleChange}
-        />
-
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded mb-3"
-          value={formData.email}
-          onChange={handleChange}
-        />
-
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded mb-3"
-          value={formData.password}
-          onChange={handleChange}
-        />
-
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          className="w-full p-2 border rounded mb-4"
-          value={formData.confirmPassword}
-          onChange={handleChange}
-        />
+        <div className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            value={formData.name}
+            onChange={handleChange}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            value={formData.password}
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            name="confirmPassword"
+            placeholder="Confirm Password"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+          />
+        </div>
 
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-60"
+          className="w-full bg-blue-600 text-white font-semibold py-3 rounded-xl mt-6 hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 disabled:opacity-50"
         >
           {loading ? "Creating account..." : "Register"}
         </button>
 
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-6 text-gray-600">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
+          <Link
+            to="/login"
+            className="text-blue-600 font-semibold hover:underline"
+          >
             Login
           </Link>
         </p>
