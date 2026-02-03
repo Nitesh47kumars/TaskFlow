@@ -4,21 +4,25 @@ const Navbar = () => {
   const { user, logout } = useAuth();
 
   return (
-    <div className="flex justify-between items-center bg-white px-6 py-4 shadow">
+    <nav className="bg-white shadow px-6 py-4 flex justify-between items-center">
       <h1 className="text-xl font-bold text-blue-600">TaskFlow</h1>
 
       <div className="flex items-center gap-4">
-        <span className="text-gray-600 text-sm">
-          {user?.name}
-        </span>
+        {user && (
+          <div className="text-sm text-right">
+            <p className="font-semibold">{user.name}</p>
+            <p className="text-gray-500">{user.email}</p>
+          </div>
+        )}
+
         <button
           onClick={logout}
-          className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600"
+          className="px-3 py-2 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200"
         >
           Logout
         </button>
       </div>
-    </div>
+    </nav>
   );
 };
 
