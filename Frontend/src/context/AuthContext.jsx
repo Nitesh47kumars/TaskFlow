@@ -5,17 +5,25 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); // Start as true
   const [error, setError] = useState(null);
 
-  const token = localStorage.getItem("token");
-
   useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      fetchCurrentUser();
-    }
-  }, [token]);
+    const checkAuth = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        try {
+          const res = await axios.get("/users/me");
+          setUser(res.data.user);
+        } catch (err) {
+          logout();
+        }
+      }
+      setLoading(false)
+    };
+    checkAuth();
+  }, []);
 
   const fetchCurrentUser = async () => {
     try {
